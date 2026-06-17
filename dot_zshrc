@@ -28,10 +28,6 @@ bindkey '^[[B' history-search-forward
 bindkey '^[[1;3C' forward-word
 bindkey '^[[1;3D' backward-word
 
-# auto suggesions and syntax highlighting
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 
 
 
@@ -78,6 +74,44 @@ function tat {
     tmux new-session -s "$name"
   fi
 }
+
+# --- yazi -> terminal navigator ---
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    command yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd < "$tmp"
+    [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+    command rm -f -- "$tmp"
+}
+
+# --- timg: inline images via terminal graphics protocol (imgcat-style) ---
+# tmux does NOT pass through the iterm2/kitty image protocols, but it does pass
+# sixel (tmux 3.4+ with a sixel-capable terminal like WezTerm). So: sixel inside
+# tmux, higher-quality iterm2 outside. No -g, so timg auto-fits to the terminal.
+if [[ -n $TMUX ]]; then
+  export TIMG_DEFAULT_OPTIONS="-ps"
+else
+  export TIMG_DEFAULT_OPTIONS="-pi"
+fi
+
+# render at ~70% of the current terminal width; height follows aspect ratio.
+# (-g is in character cells, so compute it per-call against $COLUMNS. Protocol
+# still comes from TIMG_DEFAULT_OPTIONS above; an explicit -g you pass wins.)
+timg() { command timg -g "$(( COLUMNS * 7 / 10 ))x" "$@"; }
+
+# --- treen: tree capped at N entries per directory ---
+[[ -f ~/.zsh/treen.zsh ]] && source ~/.zsh/treen.zsh
+
+# auto suggestions and syntax highlighting (source from wherever they're installed:
+# apt -> /usr/share, Homebrew arm64 -> /opt/homebrew/share, Homebrew x86 -> /usr/local/share)
+# sourced near the end on purpose: zsh-syntax-highlighting must be loaded last.
+for _p in /usr/share /opt/homebrew/share /usr/local/share; do
+  [[ -f $_p/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+    source $_p/zsh-autosuggestions/zsh-autosuggestions.zsh
+  [[ -f $_p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+    source $_p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+done
+unset _p
 
 # ----------
 # status line with starship -> MUST COME LAST
