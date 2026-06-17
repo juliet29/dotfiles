@@ -1,0 +1,8 @@
+# Patterns are matched against TARGET paths (relative to $HOME), not source names.
+# Ignored entries are not managed/applied by chezmoi and won't be re-added.
+
+# nvim config is its own git repo, managed separately
+.config/nvim
+
+# tmux plugins are installed by tpack, not tracked here
+.config/tmux/plugins
