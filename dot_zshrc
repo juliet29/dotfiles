@@ -1,0 +1,84 @@
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
+
+zstyle ':completion:*' menu select
+
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+
+# history set up
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+setopt share_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_verify
+# keep history local to panes  
+unsetopt SHARE_HISTORY
+setopt NO_INC_APPEND_HISTORY
+
+# completion from history using arrow keys # NOTE: -> system specific!
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+
+# navigation using option + arrow keys (# can use cat -v to see what the terminal sends) 
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
+
+# auto suggesions and syntax highlighting
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+
+
+#  ------- replace standard tools
+# eza <- ls
+alias ls="eza --icons=always"
+
+# zoxide <- cd
+eval "$(zoxide init zsh)"
+alias cd="z"
+
+
+# --- fzf ----> fuzzy finder
+eval "$(fzf --zsh)"
+
+# use fd for fzf
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
+
+# git with fzf -> see https://www.josean.com/posts/7-amazing-cli-tools for details
+source ~/fzf-git.sh/fzf-git.sh
+
+
+# for tmux ---
+# tat: tmux attach
+function tat {
+  name=$(basename `pwd` | sed -e 's/\.//g')
+
+  if tmux ls 2>&1 | grep "$name"; then
+    tmux attach -t "$name"
+  elif [ -f .envrc ]; then
+    direnv exec / tmux new-session -s "$name"
+  else
+    tmux new-session -s "$name"
+  fi
+}
+
+# ----------
+# status line with starship -> MUST COME LAST
+eval "$(starship init zsh)"
