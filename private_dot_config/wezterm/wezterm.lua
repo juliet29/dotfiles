@@ -4,7 +4,7 @@ local act = wezterm.action
 local config = wezterm.config_builder()
 
 -- Font (matching kitty)
-config.font = wezterm.font("MenloLGS Nerd Font Mono")
+config.font = wezterm.font("MesloLGS Nerd Font Mono")
 config.font_size = 12.0
 
 config.enable_tab_bar = false -- set to false for tmux..
