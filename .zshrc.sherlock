@@ -1,0 +1,101 @@
+# ===========================================================================
+# Shared — safe on the Sherlock host zsh AND inside the container
+# ===========================================================================
+export EDITOR="nvim"
+export VISUAL="nvim"
+export PATH="$HOME/bin:$PATH"
+
+# completion
+fpath+=~/.zfunc
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+
+# history
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_verify
+unsetopt SHARE_HISTORY
+setopt NO_INC_APPEND_HISTORY
+
+# history search with arrow keys
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+# word navigation with alt + arrow keys
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
+
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+
+# tmux socket isolation: Apptainer bind-mounts host /tmp, so host tmux
+# (protocol 8) and the container's older tmux (protocol 7) would otherwise
+# share /tmp/tmux-UID/default and collide with "protocol version mismatch".
+# Give each context its own socket dir so they never touch the same server.
+if [[ -n "$APPTAINER_CONTAINER" ]]; then
+  export TMUX_TMPDIR="/tmp/tmux-container-$(id -u)"
+else
+  export TMUX_TMPDIR="/tmp/tmux-host-$(id -u)"
+fi
+mkdir -p "$TMUX_TMPDIR" 2>/dev/null
+
+if [[ -n "$APPTAINER_CONTAINER" ]]; then
+  # =========================================================================
+  # Container — full setup (modern tools installed in the image)
+  # =========================================================================
+  [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+  # eza <- ls
+  command -v eza >/dev/null && alias ls="eza --icons=always"
+
+  # zoxide <- cd
+  if command -v zoxide >/dev/null; then
+    eval "$(zoxide init zsh)"
+    alias cd="z"
+  fi
+
+  # fzf -> fuzzy finder (uses fd)
+  if command -v fzf >/dev/null; then
+    eval "$(fzf --zsh)"
+    export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+    _fzf_compgen_path() { fd --hidden --exclude .git . "$1"; }
+    _fzf_compgen_dir()  { fd --type=d --hidden --exclude .git . "$1"; }
+  fi
+  [ -f /usr/local/share/fzf-git.sh/fzf-git.sh ] && \
+    source /usr/local/share/fzf-git.sh/fzf-git.sh
+
+  # tat: tmux attach
+  function tat {
+    name=$(basename "$PWD" | sed -e 's/\.//g')
+    if tmux ls 2>/dev/null | grep -q "$name"; then
+      tmux attach -t "$name"
+    elif [ -f .envrc ]; then
+      direnv exec / tmux new-session -s "$name"
+    else
+      tmux new-session -s "$name"
+    fi
+  }
+
+  # starship prompt (fancy config) — MUST COME LAST
+  command -v starship >/dev/null && eval "$(starship init zsh)"
+else
+  # =========================================================================
+  # Sherlock host — minimal (old glibc; keep deps to a minimum)
+  # =========================================================================
+  # Try musl-static starship with an ASCII-only config; if it can't run
+  # (e.g. glibc error), fall back to a plain built-in prompt.
+  if command -v starship >/dev/null 2>&1 && starship --version >/dev/null 2>&1; then
+    export STARSHIP_CONFIG="$HOME/.config/starship-minimal.toml"
+    eval "$(starship init zsh)"
+  else
+    autoload -Uz colors && colors
+    setopt prompt_subst
+    PROMPT='%F{green}%n@%m%f:%F{blue}%~%f %# '
+  fi
+fi
