@@ -8,6 +8,8 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 
 
+
+
 # history set up
 HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
