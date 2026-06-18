@@ -14,6 +14,8 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 
 
+
+
 # history set up
 HISTFILE=$HOME/.zhistory
 SAVEHIST=1000
@@ -22,7 +24,7 @@ setopt share_history
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_verify
-# keep history local to panes  
+# keep history local to panes
 unsetopt SHARE_HISTORY
 setopt NO_INC_APPEND_HISTORY
 
@@ -30,7 +32,7 @@ setopt NO_INC_APPEND_HISTORY
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
-# navigation using option + arrow keys (# can use cat -v to see what the terminal sends) 
+# navigation using option + arrow keys (# can use cat -v to see what the terminal sends)
 bindkey '^[[1;3C' forward-word
 bindkey '^[[1;3D' backward-word
 
