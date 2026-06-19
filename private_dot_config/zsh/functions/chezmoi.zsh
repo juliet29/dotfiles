@@ -18,6 +18,7 @@ nvim() {
 # ce  -> edit a managed file's source and re-apply on save
 alias ce='chezmoi edit --apply'
 
+alias ca='chezmoi apply'
 # ccd -> jump to the chezmoi source repo in the current shell
 ccd() { builtin cd "$(chezmoi source-path)"; }
 

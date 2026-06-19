@@ -1,5 +1,8 @@
 return {
   "folke/snacks.nvim",
+  opts = {
+    explorer = { enabled = false },
+  },
   keys = {
     -- the keybindings from above
     {
@@ -9,5 +12,8 @@ return {
       end,
       desc = "Find Hidden and Ignored Files",
     },
+    -- disable explorer keys
+    { "<leader>e", false },
+    { "<leader>E", false },
   },
 }
