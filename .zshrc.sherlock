@@ -5,6 +5,9 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export PATH="$HOME/bin:$PATH"
 
+# personal OAK directory shortcut
+export JNOAK="$OAK/$USER"
+
 # completion
 fpath+=~/.zfunc
 autoload -Uz compinit && compinit
