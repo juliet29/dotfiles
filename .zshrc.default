@@ -1,8 +1,14 @@
-alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+# alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 zstyle ':completion:*' menu select
+
+
+# Automatically load all custom functions and snippets
+for file in ~/.config/zsh/functions/*.zsh; do
+  [ -r "$file" ] && source "$file"
+done
 
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -59,50 +65,9 @@ _fzf_compgen_dir() {
   fd --type=d --hidden --exclude .git . "$1"
 }
 
-# git with fzf -> see https://www.josean.com/posts/7-amazing-cli-tools for details
-source ~/fzf-git.sh/fzf-git.sh
-
-
-# for tmux ---
-# tat: tmux attach
-function tat {
-  name=$(basename `pwd` | sed -e 's/\.//g')
-
-  if tmux ls 2>&1 | grep "$name"; then
-    tmux attach -t "$name"
-  elif [ -f .envrc ]; then
-    direnv exec / tmux new-session -s "$name"
-  else
-    tmux new-session -s "$name"
-  fi
-}
-
-# --- yazi -> terminal navigator ---
-function y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-    command yazi "$@" --cwd-file="$tmp"
-    IFS= read -r -d '' cwd < "$tmp"
-    [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
-    command rm -f -- "$tmp"
-}
-
-# --- timg: inline images via terminal graphics protocol (imgcat-style) ---
-# tmux does NOT pass through the iterm2/kitty image protocols, but it does pass
-# sixel (tmux 3.4+ with a sixel-capable terminal like WezTerm). So: sixel inside
-# tmux, higher-quality iterm2 outside. No -g, so timg auto-fits to the terminal.
-if [[ -n $TMUX ]]; then
-  export TIMG_DEFAULT_OPTIONS="-ps"
-else
-  export TIMG_DEFAULT_OPTIONS="-pi"
-fi
-
-# render at ~70% of the current terminal width; height follows aspect ratio.
-# (-g is in character cells, so compute it per-call against $COLUMNS. Protocol
-# still comes from TIMG_DEFAULT_OPTIONS above; an explicit -g you pass wins.)
-timg() { command timg -g "$(( COLUMNS * 7 / 10 ))x" "$@"; }
-
-# --- treen: tree capped at N entries per directory ---
-[[ -f ~/.zsh/treen.zsh ]] && source ~/.zsh/treen.zsh
+# Tools in .local/share
+source ~/.local/share/forgit/forgit.plugin.zsh
+source ~/.local/share/fzf-tab/fzf-tab.plugin.zsh
 
 # auto suggestions and syntax highlighting (source from wherever they're installed:
 # apt -> /usr/share, Homebrew arm64 -> /opt/homebrew/share, Homebrew x86 -> /usr/local/share)
@@ -118,3 +83,5 @@ unset _p
 # ----------
 # status line with starship -> MUST COME LAST
 eval "$(starship init zsh)"
+
+export PATH="/root/.pixi/bin:$PATH"
