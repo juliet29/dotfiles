@@ -74,18 +74,10 @@ ca() {
 # ccd -> jump to the chezmoi source repo in the current shell
 ccd() { builtin cd "$(chezmoi source-path)"; }
 
-# cez -> edit the actual .zshrc source partial for THIS machine, then re-apply.
-# dot_zshrc.tmpl is only a selector; the real content lives in .zshrc.sherlock /
-# .zshrc.default, chosen by the same rule the template uses.
+# cez -> edit the single .zshrc source (dot_zshrc), then re-apply.
+# One file now handles every context at runtime, so no selector needed.
 cez() {
-  local src file
-  src="$(chezmoi source-path)" || return
-  if [[ -n "$SHERLOCK" || "$(hostname -f 2>/dev/null)" == *.int ]]; then
-    file="$src/.zshrc.sherlock"
-  else
-    file="$src/.zshrc.default"
-  fi
-  command nvim "$file" && chezmoi apply ~/.zshrc
+  command nvim "$(chezmoi source-path ~/.zshrc)" && chezmoi apply ~/.zshrc
 }
 
 

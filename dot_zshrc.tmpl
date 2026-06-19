@@ -1,6 +1,0 @@
-{{- /* Sherlock sets $SHERLOCK in every login shell; fqdn ends in .int as a fallback */ -}}
-{{- if or (ne (env "SHERLOCK") "") (hasSuffix ".int" .chezmoi.fqdnHostname) -}}
-{{ include ".zshrc.sherlock" }}
-{{- else -}}
-{{ include ".zshrc.default" }}
-{{- end -}}
