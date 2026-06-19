@@ -67,6 +67,7 @@ _fzf_compgen_dir() {
 
 # Tools in .local/share
 source ~/.local/share/forgit/forgit.plugin.zsh
+source ~/.local/share/fzf-tab/fzf-tab.plugin.zsh
 
 # auto suggestions and syntax highlighting (source from wherever they're installed:
 # apt -> /usr/share, Homebrew arm64 -> /opt/homebrew/share, Homebrew x86 -> /usr/local/share)
