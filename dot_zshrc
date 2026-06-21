@@ -1,8 +1,5 @@
 # alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
-# If anything below fails to load at startup (a missing tool / plugin), run
-# `deps` to see what's missing.
-
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 zstyle ':completion:*' menu select
@@ -56,51 +53,57 @@ if [[ -n "$SHERLOCK" && -z "$APPTAINER_CONTAINER" ]]; then
 else
   # --- container / personal machine: full setup ----------------------------
 
-  #  ------- replace standard tools
-  # eza <- ls  (guarded: keep plain ls if eza isn't installed yet)
-  command -v eza >/dev/null && alias ls="eza --icons=always"
+#  ------- replace standard tools
+# eza <- ls
+alias ls="eza --icons=always"
 
-  # zoxide <- cd  (guarded: keep plain cd if zoxide isn't installed yet)
-  if command -v zoxide >/dev/null; then
-    eval "$(zoxide init zsh)"
-    alias cd="z"
-  fi
+# zoxide <- cd
+eval "$(zoxide init zsh)"
+alias cd="z"
 
-  # --- fzf ----> fuzzy finder
-  eval "$(fzf --zsh)"
 
-  # use fd for fzf
-  export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+# --- fzf ----> fuzzy finder
+eval "$(fzf --zsh)"
 
-  _fzf_compgen_path() {
-    fd --hidden --exclude .git . "$1"
-  }
+# use fd for fzf
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
 
-  # Use fd to generate the list for directory completion
-  _fzf_compgen_dir() {
-    fd --type=d --hidden --exclude .git . "$1"
-  }
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
 
-  # Tools in .local/share
-  source ~/.local/share/forgit/forgit.plugin.zsh
-  source ~/.local/share/fzf-tab/fzf-tab.plugin.zsh
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
 
-  # auto suggestions and syntax highlighting (source from wherever they're installed:
-  # apt -> /usr/share, Homebrew arm64 -> /opt/homebrew/share, Homebrew x86 -> /usr/local/share)
-  # sourced near the end on purpose: zsh-syntax-highlighting must be loaded last.
-  for _p in /usr/share /opt/homebrew/share /usr/local/share; do
-    [[ -f $_p/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
-      source $_p/zsh-autosuggestions/zsh-autosuggestions.zsh
-    [[ -f $_p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
-      source $_p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  done
-  unset _p
+# Tools in .local/share
+source ~/.local/share/forgit/forgit.plugin.zsh
+source ~/.local/share/fzf-tab/fzf-tab.plugin.zsh
+source ~/.local/share/bashmarks/bashmarks.sh
 
-  # ----------
-  # status line with starship -> MUST COME LAST
-  eval "$(starship init zsh)"
+# auto suggestions and syntax highlighting (source from w
+# herever they're installed:
+# apt -> /usr/share, Homebrew arm64 -> /opt/homebrew/share, Homebrew x86 -> /usr/local/share)
+# sourced near the end on purpose: zsh-syntax-highlighting must be loaded last.
+for _p in /usr/share /opt/homebrew/share /usr/local/share; do
+  [[ -f $_p/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+    source $_p/zsh-autosuggestions/zsh-autosuggestions.zsh
+  [[ -f $_p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+    source $_p/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+done
+unset _p
 
-  export PATH="/root/.pixi/bin:$PATH"
+# ----------
+# status line with starship -> MUST COME LAST
+eval "$(starship init zsh)"
+
+# pixi: home differs by machine (/root in one container, /home/users on Sherlock)
+if [[ -n "$SHERLOCK" || -d /home/users/jnwagwu/.pixi/bin ]]; then
+    export PATH="/home/users/jnwagwu/.pixi/bin:$PATH"
+else
+    export PATH="/root/.pixi/bin:$PATH"
+fi
 fi
