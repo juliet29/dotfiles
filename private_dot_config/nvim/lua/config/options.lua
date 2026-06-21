@@ -60,6 +60,6 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "tex",
   callback = function()
     vim.o.background = "light"
-    vim.cmd("colorscheme zenbones") -- Replace with your desired theme
+    vim.cmd("colorscheme dawnfox") -- light theme from the nightfox family (matches duskfox)
   end,
 })
