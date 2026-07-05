@@ -11,7 +11,7 @@ gfs() {
   # pipe through delta if available, otherwise use git's own colored diff
   _gfs_diff() {
     if command -v delta >/dev/null 2>&1; then
-      git diff "$@" | delta -s
+      git diff "$@" | delta
     else
       git diff "$@"
     fi
