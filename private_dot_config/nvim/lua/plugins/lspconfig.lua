@@ -42,6 +42,44 @@ return {
         return on_dir("/projectsContainer")
       end,
     }
+
+    --- texlab: native LaTeX language server — provides \command completion,
+    --- citations, cross-refs, symbol goto-definition.
+    --- Compilation is handled by vimtex (\ll), so texlab's build is disabled.
+    --- Grammar comes from LTeX, so chktex is disabled to avoid duplication.
+    --- Formatting goes through conform.nvim + latexindent, so texlab's
+    --- formatter isn't wired up.
+    opts.servers.texlab = {
+      settings = {
+        texlab = {
+          build = { onSave = false },
+          chktex = { onOpenAndSave = false, onEdit = false },
+          diagnosticsDelay = 300,
+          forwardSearch = { executable = "", args = {} },
+        },
+      },
+    }
+
+    --- LTeX+ (LanguageTool as LSP) for grammar in tex/markdown/bib
+    opts.servers.ltex_plus = {
+      filetypes = { "tex", "plaintex", "bib", "markdown" },
+      settings = {
+        ltex = {
+          language = "en-US",
+          additionalRules = {
+            enablePickyRules = true,
+            motherTongue = "en",
+          },
+          disabledRules = {
+            ["en-US"] = { "PROFANITY" },
+          },
+          -- Load personal dictionary from the same spellfile used by :zg
+          dictionary = {
+            ["en-US"] = { ":" .. vim.fn.expand("~/.config/nvim/spell/en.utf-8.add") },
+          },
+        },
+      },
+    }
     -- Astro and Typescript
     -- opts.servers.astro = {}
     --

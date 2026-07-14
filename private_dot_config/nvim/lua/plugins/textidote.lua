@@ -1,5 +1,6 @@
 return {
   "PatrBal/vim-textidote",
+  enabled = false, -- disabled: LTeX-LS covers grammar; flip to true to restore
   init = function()
     vim.g.textidote_jar = "/usr/local/bin/textidote.jar"
     vim.g.textidote_dictionary = "/.config/vim/spell/spell.en.utf-8.add"

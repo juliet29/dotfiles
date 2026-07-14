@@ -20,7 +20,7 @@ vim.g.vimtex_complete_enabled = true
 ---   },
 --- } })
 
-vim.opt.spellfile = vim.fn.expand("~/.config/vim/spell/spell.en.utf-8.add")
+vim.opt.spellfile = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
 
 --- line numbers
 vim.opt.number = true
@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = { "*.txt", "*.md" },
+  pattern = { "*.txt", "*.md", "*.tex" },
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.linebreak = true
@@ -55,11 +55,3 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 -- Stop Macros!!!
 vim.keymap.set("n", "q", "<Nop>")
 
---- Special color scheme for latex
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "tex",
-  callback = function()
-    vim.o.background = "light"
-    vim.cmd("colorscheme dawnfox") -- light theme from the nightfox family (matches duskfox)
-  end,
-})

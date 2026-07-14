@@ -2,6 +2,8 @@ return {
   "folke/snacks.nvim",
   opts = {
     explorer = { enabled = false },
+    input = { enabled = true },
+    picker = { ui_select = true },
   },
   keys = {
     -- the keybindings from above
