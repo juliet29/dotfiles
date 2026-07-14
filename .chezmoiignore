@@ -4,3 +4,6 @@
 
 # # tmux plugins are installed manually via git
 # .config/tmux/plugins
+
+# nvim compiled spellfiles regenerate from .add via :mkspell
+.config/nvim/spell/*.spl
