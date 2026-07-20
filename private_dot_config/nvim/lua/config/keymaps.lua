@@ -57,3 +57,61 @@ vim.keymap.set("n", "<Leader>g1", function()
     })
   end)
 end, { desc = "Grammar: next LTeX diag + apply first quickfix" })
+
+vim.keymap.set("n", "<Leader>gl", function()
+  Snacks.picker.diagnostics_buffer({
+    filter = { source = "ltex_plus" },
+  })
+end, { desc = "LTeX: list all issues in buffer" })
+
+-- One-keystroke LTeX review loop
+local function ltex_apply_and_next(title_pattern)
+  vim.lsp.buf.code_action({
+    filter = function(a) return a.title and a.title:match(title_pattern) ~= nil end,
+    apply = true,
+  })
+  vim.defer_fn(function()
+    vim.diagnostic.jump({ count = 1, filter = is_ltex })
+  end, 80)
+end
+
+vim.keymap.set("n", "<F3>", function() ltex_apply_and_next("^Use '") end,
+  { desc = "LTeX: accept top suggestion + next" })
+vim.keymap.set("n", "<F4>", function() ltex_apply_and_next("^Add '") end,
+  { desc = "LTeX: add to dictionary + next" })
+vim.keymap.set("n", "<F5>", function() vim.diagnostic.jump({ count = 1, filter = is_ltex }) end,
+  { desc = "LTeX: skip to next" })
+
+-- Diagnostic highlights (nightfox colorscheme)
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = true, sp = "#ef5350" })
+    vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true, sp = "#ffb74d" })
+    vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true, sp = "#64b5f6" })
+    vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, sp = "#81c784" })
+  end,
+})
+
+vim.diagnostic.config({
+  underline = { severity = { min = vim.diagnostic.severity.INFO } },
+  virtual_text = true,
+})
+
+-- Final grammar check: start LTeX for a comprehensive pass (disabled by default, Harper handles ongoing)
+vim.api.nvim_create_user_command("LTexCheck", function()
+  vim.lsp.start({
+    name = "ltex_plus",
+    cmd = { "ltex-ls" },
+    filetypes = { "tex", "plaintex", "bib", "markdown" },
+    settings = {
+      ltex = {
+        language = "en-US",
+        additionalRules = { enablePickyRules = true, motherTongue = "en" },
+        disabledRules = { ["en-US"] = { "PROFANITY" } },
+        dictionary = { ["en-US"] = { ":" .. vim.fn.expand("~/.config/nvim/spell/en.utf-8.add") } },
+      },
+    },
+  })
+  vim.notify("LTeX started for final grammar check", vim.log.levels.INFO)
+end, { desc = "Start LTeX for final grammar check" })

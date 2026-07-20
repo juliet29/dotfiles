@@ -60,8 +60,9 @@ return {
       },
     }
 
-    --- LTeX+ (LanguageTool as LSP) for grammar in tex/markdown/bib
+    --- LTeX+ (LanguageTool as LSP) — disabled by default, use :LTexCheck to run
     opts.servers.ltex_plus = {
+      enabled = false,
       filetypes = { "tex", "plaintex", "bib", "markdown" },
       settings = {
         ltex = {
@@ -73,9 +74,26 @@ return {
           disabledRules = {
             ["en-US"] = { "PROFANITY" },
           },
-          -- Load personal dictionary from the same spellfile used by :zg
           dictionary = {
             ["en-US"] = { ":" .. vim.fn.expand("~/.config/nvim/spell/en.utf-8.add") },
+          },
+        },
+      },
+    }
+
+    --- Harper (Rust-based grammar, fast, English-focused)
+    opts.servers.harper_ls = {
+      filetypes = { "tex", "plaintex", "markdown" },
+      settings = {
+        harper_ls = {
+          linters = {
+            spell_check = true,
+            grammar = true,
+            linking_verb = true,
+            repeated_words = true,
+          },
+          dictionary = {
+            words_dir = vim.fn.expand("~/.config/nvim/spell"),
           },
         },
       },
