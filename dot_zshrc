@@ -33,6 +33,9 @@ bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
 # navigation using option + arrow keys (# can use cat -v to see what the terminal sends)
+# empty WORDCHARS => every non-alphanumeric (_ - . / = etc.) is a word boundary,
+# so word motion hops subwords in code instead of jumping whole paths/identifiers.
+WORDCHARS=''
 bindkey '^[[1;3C' forward-word
 bindkey '^[[1;3D' backward-word
 

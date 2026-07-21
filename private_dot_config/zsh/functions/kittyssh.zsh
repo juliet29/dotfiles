@@ -1,0 +1,4 @@
+kssm() {
+  kitten ssh moth
+}
+

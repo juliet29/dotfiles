@@ -7,3 +7,9 @@
 
 # nvim compiled spellfiles regenerate from .add via :mkspell
 .config/nvim/spell/*.spl
+
+# lazy.nvim lockfile: let each machine track plugin versions independently
+.config/nvim/lazy-lock.json
+
+# pet: snippets sync via gist backend; config.toml stays machine-local
+.config/pet

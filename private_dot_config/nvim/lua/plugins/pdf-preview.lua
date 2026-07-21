@@ -6,6 +6,7 @@
 -- with vimtex's known output path (e.g. build/<mainfile>.pdf).
 return {
   "franco-ruggeri/pdf-preview.nvim",
+  enabled = false, -- disabled: turns off live PDF preview + <leader>lp/<leader>lP keymaps
   ft = { "tex", "markdown", "typst" },
   cmd = { "PdfPreviewStart", "PdfPreviewStop", "PdfPreviewToggle" },
   opts = {

@@ -1,6 +1,0 @@
-
-[[Snippets]]
-  Description = "Welcome to pet"
-  Output = ""
-  Tag = []
-  command = "echo \"Welcome to pet!\""
