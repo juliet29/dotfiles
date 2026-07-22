@@ -11,6 +11,22 @@ vim.g.lazyvim_python_ruff = "ruff"
 vim.g.autoformat = true
 vim.opt.wrap = true
 
+-- Clipboard over SSH: no X server / xclip on headless Sherlock compute nodes,
+-- so route the +/* registers through OSC 52 (terminal escape sequence).
+-- Requires the terminal + tmux to allow it (tmux: set-clipboard on, already set).
+local osc52 = require("vim.ui.clipboard.osc52")
+vim.g.clipboard = {
+  name = "OSC 52",
+  copy = {
+    ["+"] = osc52.copy("+"),
+    ["*"] = osc52.copy("*"),
+  },
+  paste = {
+    ["+"] = osc52.paste("+"),
+    ["*"] = osc52.paste("*"),
+  },
+}
+
 --- vimtex completion
 vim.g.vimtex_complete_enabled = true
 --- --- Basedpyright settings

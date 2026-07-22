@@ -18,15 +18,20 @@ export VISUAL="nvim"
 
 # history set up
 HISTFILE=$HOME/.zhistory
-SAVEHIST=1000
-HISTSIZE=999
-setopt share_history
+HISTSIZE=100000
+SAVEHIST=100000
+# Flush each command to $HISTFILE the moment it finishes (with its timestamp),
+# instead of only on a clean shell exit. On Sherlock the container/allocation
+# panes are usually KILLED (allocation ends, login node reboots), never exited
+# cleanly -- with the old NO_INC_APPEND_HISTORY that session's history was lost.
+# $HISTFILE is on shared $HOME (+ bind-mounted into the container), so this is
+# the same history on every login node. Per-pane, not merged live: we do NOT
+# enable share_history (kept the old "history local to panes" intent).
+setopt INC_APPEND_HISTORY_TIME
+setopt EXTENDED_HISTORY
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_verify
-# keep history local to panes
-unsetopt SHARE_HISTORY
-setopt NO_INC_APPEND_HISTORY
 
 # Force emacs keymap. Without this, zsh auto-selects the vi keymap because
 # $EDITOR/$VISUAL contain the substring "vi" (nvim). In vi mode a bare ESC is
