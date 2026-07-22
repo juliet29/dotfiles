@@ -28,6 +28,12 @@ setopt hist_verify
 unsetopt SHARE_HISTORY
 setopt NO_INC_APPEND_HISTORY
 
+# Force emacs keymap. Without this, zsh auto-selects the vi keymap because
+# $EDITOR/$VISUAL contain the substring "vi" (nvim). In vi mode a bare ESC is
+# bound to vi-cmd-mode, so option+arrow (whose sequence starts with ESC) drops
+# you into command mode and rings the bell instead of running forward-word.
+bindkey -e
+
 # completion from history using arrow keys # NOTE: -> system specific!
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
