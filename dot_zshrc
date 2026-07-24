@@ -115,4 +115,7 @@ if [[ -n "$SHERLOCK" || -d /home/users/jnwagwu/.pixi/bin ]]; then
 else
     export PATH="/root/.pixi/bin:$PATH"
 fi
+
+# user-local scripts (texshow, mdtex, ...)
+export PATH="$HOME/.local/bin:$PATH"
 fi
