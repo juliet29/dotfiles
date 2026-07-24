@@ -22,6 +22,11 @@ Compare pinned vs installed parser revision:
 If they differ and `<lang>.so` (in `~/.local/share/nvim/site/parser/`) is old, the rebuild failed.
 
 ## Fix
+> **moth container (2026-07-24):** the `tree-sitter` CLI is now baked into the moth
+> Dockerfile (`/docker_files/Dockerfile`, installed to `/usr/local/bin`), so after a
+> `moth-recreate` just `moth-build` — no manual install needed. The steps below remain
+> the recovery path for other machines / a running container before the next rebuild.
+
 1. Install the `tree-sitter` CLI somewhere on PATH (gcc/cc must also be present for the compile):
    - Sherlock / no-sudo / userspace: prebuilt binary into `~/bin` (on PATH, persists):
      ```sh

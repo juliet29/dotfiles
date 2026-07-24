@@ -13,3 +13,13 @@
 
 # pet: snippets sync via gist backend; config.toml stays machine-local
 .config/pet
+
+# ~/.claude: sync CLAUDE.md only — never let `chezmoi add ~/.claude` scoop up
+# Claude Code secrets/state (.credentials.json = OAuth tokens, sessions/, projects/,
+# history.jsonl). Only CLAUDE.md is in the source today; this keeps it that way.
+.claude/*
+!.claude/CLAUDE.md
+
+
+# settings for typst-preview are specific to platform. On Autodesk moth, can't auto redirect to the browser, so have special settings
+.config/nvim/lua/plugins/typst-preview.lua
