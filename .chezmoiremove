@@ -1,0 +1,17 @@
+# nvim plugin cleanup (2026-07-25): chezmoi does NOT auto-delete targets whose
+# source was removed/moved, so list the stale flat paths explicitly. These are
+# the 6 removed dead-weight specs + the 5 chezmoi-managed specs relocated into
+# plugins/writing/. Scoped to exact flat paths — the specs that stay flat are
+# intentionally absent. typst-preview is NOT here: it's chezmoi-ignored
+# (platform-specific) so this couldn't remove it anyway — moved manually instead.
+.config/nvim/lua/plugins/example.lua
+.config/nvim/lua/plugins/nvim-cmp.lua
+.config/nvim/lua/plugins/snakefmt.lua
+.config/nvim/lua/plugins/textidote.lua
+.config/nvim/lua/plugins/pdf-preview.lua
+.config/nvim/lua/plugins/zenbones.lua
+.config/nvim/lua/plugins/angry-reviewer.lua
+.config/nvim/lua/plugins/luasnip-latex.lua
+.config/nvim/lua/plugins/telescope-zotero.lua
+.config/nvim/lua/plugins/vale.lua
+.config/nvim/lua/plugins/vimtex.lua

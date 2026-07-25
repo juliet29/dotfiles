@@ -10,7 +10,7 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true, desc = "Save all modified buffers" }
 )
 
-vim.keymap.set("n", "<Leader>sr", "<Cmd>spellrepall<CR>", {
+vim.keymap.set("n", "<Leader>sra", "<Cmd>spellrepall<CR>", {
   desc = "Spell: replace all instances of last z= correction",
 })
 
@@ -40,7 +40,11 @@ end
 vim.keymap.set("n", "<Leader>gn", function()
   vim.diagnostic.jump({ count = 1, filter = is_ltex })
   vim.schedule(function()
-    vim.lsp.buf.code_action({ filter = function(a) return (a.kind or ""):match("quickfix") end })
+    vim.lsp.buf.code_action({
+      filter = function(a)
+        return (a.kind or ""):match("quickfix")
+      end,
+    })
   end)
 end, { desc = "Grammar: next LTeX diag + code action" })
 
@@ -52,7 +56,9 @@ vim.keymap.set("n", "<Leader>g1", function()
   vim.diagnostic.jump({ count = 1, filter = is_ltex })
   vim.schedule(function()
     vim.lsp.buf.code_action({
-      filter = function(a) return (a.kind or ""):match("quickfix") end,
+      filter = function(a)
+        return (a.kind or ""):match("quickfix")
+      end,
       apply = true, -- auto-applies if exactly one match
     })
   end)
@@ -67,7 +73,9 @@ end, { desc = "LTeX: list all issues in buffer" })
 -- One-keystroke LTeX review loop
 local function ltex_apply_and_next(title_pattern)
   vim.lsp.buf.code_action({
-    filter = function(a) return a.title and a.title:match(title_pattern) ~= nil end,
+    filter = function(a)
+      return a.title and a.title:match(title_pattern) ~= nil
+    end,
     apply = true,
   })
   vim.defer_fn(function()
@@ -75,12 +83,15 @@ local function ltex_apply_and_next(title_pattern)
   end, 80)
 end
 
-vim.keymap.set("n", "<F3>", function() ltex_apply_and_next("^Use '") end,
-  { desc = "LTeX: accept top suggestion + next" })
-vim.keymap.set("n", "<F4>", function() ltex_apply_and_next("^Add '") end,
-  { desc = "LTeX: add to dictionary + next" })
-vim.keymap.set("n", "<F5>", function() vim.diagnostic.jump({ count = 1, filter = is_ltex }) end,
-  { desc = "LTeX: skip to next" })
+vim.keymap.set("n", "<F3>", function()
+  ltex_apply_and_next("^Use '")
+end, { desc = "LTeX: accept top suggestion + next" })
+vim.keymap.set("n", "<F4>", function()
+  ltex_apply_and_next("^Add '")
+end, { desc = "LTeX: add to dictionary + next" })
+vim.keymap.set("n", "<F5>", function()
+  vim.diagnostic.jump({ count = 1, filter = is_ltex })
+end, { desc = "LTeX: skip to next" })
 
 -- Diagnostic highlights (nightfox colorscheme)
 vim.api.nvim_create_autocmd("ColorScheme", {

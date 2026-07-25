@@ -19,7 +19,11 @@ require("lazy").setup({
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import/override with your plugins
+    -- Flat specs live directly in lua/plugins/; writing/LaTeX specs are grouped
+    -- under lua/plugins/writing/ (lazy.nvim's import does NOT recurse, so the
+    -- subfolder needs its own import line).
     { import = "plugins" },
+    { import = "plugins.writing" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.

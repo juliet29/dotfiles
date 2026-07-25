@@ -3,8 +3,10 @@ return {
   lazy = false, -- we don't want to lazy load VimTeX
   -- tag = "v2.15", -- uncomment to pin to a specific release
   init = function()
-    -- Viewing is done via pdf-preview.nvim, so disable vimtex's own viewer integration.
-    -- If you want forward-search from tex → Skim later, flip vimtex_view_enabled back to 1.
+    -- No PDF viewer is wired (pdf-preview.nvim was removed; this headless
+    -- container has no browser/Skim). vimtex's own viewer is disabled — compile
+    -- with \ll and open the built PDF (build/<main>.pdf) yourself. To use
+    -- vimtex's viewer later, flip vimtex_view_enabled back to 1 and set a method.
     vim.g.vimtex_view_enabled = 0
     vim.g.vimtex_view_automatic = 0
     vim.g.vimtex_view_forward_search_on_start = 0
@@ -36,7 +38,7 @@ return {
     vim.g.vimtex_quickfix_mode = 2
     vim.g.vimtex_quickfix_open_on_warning = 0
     vim.g.vimtex_quickfix_autoclose_after_keystrokes = 3
-    vim.g.vimtex_view_automatic = 0 -- previewing via pdf-preview.nvim instead of Skim
+    vim.g.vimtex_view_automatic = 0 -- no external viewer wired (pdf-preview removed)
     vim.g.vimtex_log_ignore = {
       "Underfull",
       "Overfull",

@@ -22,4 +22,6 @@
 
 
 # settings for typst-preview are specific to platform. On Autodesk moth, can't auto redirect to the browser, so have special settings
-.config/nvim/lua/plugins/typst-preview.lua
+# Relocated 2026-07-25 into plugins/writing/ with the other LaTeX/writing specs;
+# still managed manually per-machine, never by chezmoi.
+.config/nvim/lua/plugins/writing/typst-preview.lua
