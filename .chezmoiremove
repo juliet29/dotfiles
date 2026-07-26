@@ -15,3 +15,11 @@
 .config/nvim/lua/plugins/telescope-zotero.lua
 .config/nvim/lua/plugins/vale.lua
 .config/nvim/lua/plugins/vimtex.lua
+# second pass (2026-07-25): glance + minimove removed (unused); ltex-quiet +
+# lualine relocated into plugins/writing/.
+.config/nvim/lua/plugins/glance.lua
+.config/nvim/lua/plugins/minimove.lua
+.config/nvim/lua/plugins/ltex-quiet.lua
+.config/nvim/lua/plugins/lualine.lua
+# third pass (2026-07-25): snakemake relocated into plugins/python/.
+.config/nvim/lua/plugins/snakemake.lua
