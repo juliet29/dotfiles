@@ -67,6 +67,20 @@ if [[ -n "$SHERLOCK" && -z "$APPTAINER_CONTAINER" ]]; then
 else
   # --- container / personal machine: full setup ----------------------------
 
+# PATH must come first: the tool evals below (fzf --zsh, zoxide, starship) resolve
+# binaries at eval time, and fzf lives in ~/.pixi/bin. If pixi isn't on PATH yet,
+# `fzf --zsh` hits the old apt fzf (0.44.1, no --zsh flag) and errors.
+# pixi: home differs by machine (/root in one container, /home/users on Sherlock)
+if [[ -n "$SHERLOCK" || -d /home/users/jnwagwu/.pixi/bin ]]; then
+    export PATH="/home/users/jnwagwu/.pixi/bin:$PATH"
+else
+    export PATH="/root/.pixi/bin:$PATH"
+fi
+# user-local scripts (texshow, mdtex, ...)
+export PATH="$HOME/.local/bin:$PATH"
+# cargo-installed binaries (gg/grip-grab for pymple.nvim; cargo itself is a pixi global)
+export PATH="$HOME/.cargo/bin:$PATH"
+
 #  ------- replace standard tools
 # eza <- ls
 alias ls="eza --icons=always"
@@ -113,14 +127,4 @@ unset _p
 # ----------
 # status line with starship -> MUST COME LAST
 eval "$(starship init zsh)"
-
-# pixi: home differs by machine (/root in one container, /home/users on Sherlock)
-if [[ -n "$SHERLOCK" || -d /home/users/jnwagwu/.pixi/bin ]]; then
-    export PATH="/home/users/jnwagwu/.pixi/bin:$PATH"
-else
-    export PATH="/root/.pixi/bin:$PATH"
-fi
-
-# user-local scripts (texshow, mdtex, ...)
-export PATH="$HOME/.local/bin:$PATH"
 fi

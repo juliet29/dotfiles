@@ -11,8 +11,8 @@
 # lazy.nvim lockfile: let each machine track plugin versions independently
 .config/nvim/lazy-lock.json
 
-# pet: snippets sync via gist backend; config.toml stays machine-local
-.config/pet
+# pet: snippets sync via gist backend; config.toml is shared 
+.config/pet/snippet.toml
 
 # ~/.claude: sync CLAUDE.md only — never let `chezmoi add ~/.claude` scoop up
 # Claude Code secrets/state (.credentials.json = OAuth tokens, sessions/, projects/,

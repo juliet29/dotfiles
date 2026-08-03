@@ -126,3 +126,6 @@ vim.api.nvim_create_user_command("LTexCheck", function()
   })
   vim.notify("LTeX started for final grammar check", vim.log.levels.INFO)
 end, { desc = "Start LTeX for final grammar check" })
+
+--- For seeing file paths
+vim.keymap.set("n", "<leader>cp", ':let @+ = expand("%:.")<CR>', { desc = "Copy relative file path" })
