@@ -25,3 +25,9 @@
 # Relocated 2026-07-25 into plugins/writing/ with the other LaTeX/writing specs;
 # still managed manually per-machine, never by chezmoi.
 .config/nvim/lua/plugins/writing/typst-preview.lua
+
+# pymple.nvim: its `build = ":PympleBuild"` step (compiles a Rust helper) has
+# failed on this machine, so keep the spec unmanaged for now — otherwise lazy
+# would try to install + build it on every apply. Re-enable by deleting this
+# line once the build succeeds (needs a working Rust toolchain).
+.config/nvim/lua/plugins/python/pymple.lua
