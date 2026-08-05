@@ -1,0 +1,5 @@
+{{- $gistToken := promptStringOnce . "pet.gist_token" "pet gist PAT (github token for snippet sync)" -}}
+
+[data]
+  [data.pet]
+    gist_token = {{ $gistToken | quote }}
