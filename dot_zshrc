@@ -78,7 +78,7 @@ else
 fi
 # user-local scripts (texshow, mdtex, ...)
 export PATH="$HOME/.local/bin:$PATH"
-# cargo-installed binaries (gg/grip-grab for pymple.nvim; cargo itself is a pixi global)
+# cargo-installed binaries (cargo itself is a pixi global)
 export PATH="$HOME/.cargo/bin:$PATH"
 
 #  ------- replace standard tools
