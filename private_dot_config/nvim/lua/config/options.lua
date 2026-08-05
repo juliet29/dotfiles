@@ -14,18 +14,24 @@ vim.opt.wrap = true
 -- Clipboard over SSH: no X server / xclip on headless Sherlock compute nodes,
 -- so route the +/* registers through OSC 52 (terminal escape sequence).
 -- Requires the terminal + tmux to allow it (tmux: set-clipboard on, already set).
-local osc52 = require("vim.ui.clipboard.osc52")
-vim.g.clipboard = {
-  name = "OSC 52",
-  copy = {
-    ["+"] = osc52.copy("+"),
-    ["*"] = osc52.copy("*"),
-  },
-  paste = {
-    ["+"] = osc52.paste("+"),
-    ["*"] = osc52.paste("*"),
-  },
-}
+-- Gated to Sherlock: compute nodes run inside a SLURM allocation with no $SSH_TTY,
+-- so nvim's built-in OSC 52 autodetect never triggers there and the explicit
+-- provider is needed. Elsewhere (container over SSH, personal Mac) we leave
+-- vim.g.clipboard unset so nvim autodetects — OSC 52 on remote, pbcopy locally.
+if vim.env.SHERLOCK ~= nil then
+  local osc52 = require("vim.ui.clipboard.osc52")
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = osc52.copy("+"),
+      ["*"] = osc52.copy("*"),
+    },
+    paste = {
+      ["+"] = osc52.paste("+"),
+      ["*"] = osc52.paste("*"),
+    },
+  }
+end
 
 --- vimtex completion
 vim.g.vimtex_complete_enabled = true
