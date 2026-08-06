@@ -7,7 +7,7 @@
 - Prefer existing libraries over building from scratch; assume you can add whatever dependencies are genuinely useful.
 
 ## Code style
-- No docstrings, ever. No comments in code, either — write zero `#` comment lines. If something seems to need explaining, surface it as a note in your chat reply instead; I'll add a comment myself if I decide it's warranted.
+- No docstrings, ever. No comments in code, either — write zero `#` comment lines. If something seems to need explaining, surface it as a note in your chat reply instead; I'll add a comment myself if I decide it's warranted. This applies to source/application code I'm actually developing; for config files (dotfiles, editor config, tool config, etc.) comments are fine.
 - Use explicit, intention-revealing names (Kent Beck *Refactoring* / *Clean Code* style) so the code reads without comments.
 - Do not extract single-use helper functions that do just one thing — inline them. Only factor out a function when it's reused elsewhere. *Exception:* when a block is genuinely complex logic (not a one-liner) representing a distinct low-level concern, extracting it is right even if single-use — the goal is to separate abstraction levels (SLAP) so the caller reads as high-level intent and the helper holds the gnarly detail. The rule bans pulling out trivial one-liners, not cohesive complex protocols.
 - Never put imports in the middle of a function (no lazy/inline imports). All imports go at the top of the module. If you think a lazy import is needed to break a cycle, verify the cycle actually exists first — usually it doesn't.

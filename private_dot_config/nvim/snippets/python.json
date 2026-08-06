@@ -14,5 +14,9 @@
   "import pandas as pd": {
     "prefix": "impd",
     "body": "import pandas as pd"
+  },
+  "from icecream import ic": {
+    "prefix": "imic",
+    "body": "from icecream import ic"
   }
 }
