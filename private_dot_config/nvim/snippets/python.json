@@ -1,0 +1,18 @@
+{
+  "import numpy as np": {
+    "prefix": "imnp",
+    "body": "import numpy as np"
+  },
+  "import xarray as xr": {
+    "prefix": "imxr",
+    "body": "import xarray as xr"
+  },
+  "import matplotlib.pyplot as plt": {
+    "prefix": "implt",
+    "body": "import matplotlib.pyplot as plt"
+  },
+  "import pandas as pd": {
+    "prefix": "impd",
+    "body": "import pandas as pd"
+  }
+}
