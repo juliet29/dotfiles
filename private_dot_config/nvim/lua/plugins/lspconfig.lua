@@ -27,7 +27,7 @@ return {
       cmd = { "basedpyright-langserver", "--stdio" },
       settings = {
         basedpyright = {
-          analysis = { typeCheckingMode = "basic", autoImportCompletions = true },
+          analysis = { typeCheckingMode = "basic", autoImportCompletions = false },
           reportMissingTypeStubs = false,
           reportMissingParameterType = false,
           reportMissingTypeArgument = false,
