@@ -15,6 +15,10 @@
 - Name callable-typed fields/parameters as verbs so they read as functions (e.g. `pick_framing_value`, not `framing_value`).
 - Extract the *per-item body* of a loop into a small named *nested* function (a verb, e.g. `register(settings)`) that operates on one element / mutates a closed-over accumulator; leave the `for` loop itself in the outer function just calling it. Extract the item-level work, NOT a wrapper around the whole loop. Nested functions are exempt from the "no single-use helpers" rule — that rule targets module-level helpers.
 
+## Running expensive things
+- Before launching anything that could run more than a few seconds (sweeps, rollouts, training, full-dataset jobs), REASON about how long it will take and flag it to me up front if you think it'll be slow — don't kick off a multi-minute job blind and make me wait to find out if the logic was even right. Don't prototype to check: your prototyping runs tend to be slow themselves, which defeats the purpose. Think it through instead, and when you do run, do ONE real run.
+- Don't run the project's own CLI yourself to generate committed artifacts — especially figures. Give me the exact command to run instead. I need to stay in control of which real outputs get (re)generated and which don't; if you run it I lose that visibility. Throwaway sanity checks writing to `/tmp` are fine — it's the real output/figure directories I want to own.
+
 ## Architecture
 - The project's `paths.py` (e.g. a `ProjectPaths` class of concrete input/output locations) is used ONLY in the CLI layer. Library code — analysis, plotting, IO — takes paths as arguments and never imports the paths module. Inject concrete locations at the CLI boundary so the logic stays decoupled from filesystem layout and unit-testable.
 - CLI is built with `cyclopts`: one `App` per topic module (e.g. `cli/weather.py`, `weather = App(name="weather")`) with `@weather.command` functions; a top-level `cli/_study.py` aggregates the sub-apps (`app.command(weather)`) and exposes `def main(): logset(to_stderr=True); app()`; the console entry point is declared in `pyproject.toml` `[project.scripts]` pointing at `<pkg>.cli._study:main`.
