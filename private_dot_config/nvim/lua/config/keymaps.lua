@@ -10,9 +10,9 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true, desc = "Save all modified buffers" }
 )
 
-vim.keymap.set("n", "<Leader>sra", "<Cmd>spellrepall<CR>", {
-  desc = "Spell: replace all instances of last z= correction",
-})
+-- vim.keymap.set("n", "<Leader>sra", "<Cmd>spellrepall<CR>", {
+--   desc = "Spell: replace all instances of last z= correction",
+-- })
 
 vim.keymap.set("n", "<Leader>sn", "]sz=", { desc = "Spell: next error + suggest" })
 vim.keymap.set("n", "<Leader>s1", "]s1z=", { desc = "Spell: next error + accept first" })

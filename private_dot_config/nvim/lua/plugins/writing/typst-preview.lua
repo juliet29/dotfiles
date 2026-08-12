@@ -34,8 +34,8 @@ return {
     -- Headless container: no browser, so don't call xdg-open. Just print the URL.
     open_cmd = "echo 'typst-preview ready: open %s in your browser' 1>&2",
     -- Set root for previews
-    get_root = function(_)
-      return "/projectsContainer"
-    end,
+    -- get_root = function(_)
+    --   return "/projectsContainer"
+    -- end,
   },
 }
