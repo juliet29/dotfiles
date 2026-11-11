@@ -1,0 +1,11 @@
+{
+  "In-line math": {
+    "prefix": "xm",
+    "body": "\\$$1\\$$0"
+  },
+
+  "Equation": {
+    "prefix": "xmx",
+    "body": "\\$ $1 \\$$0"
+  }
+}

@@ -62,3 +62,30 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
 --   end,
 --   desc = "Restart LSP when Python dependency files change on disk",
 -- })
+
+-- :TypstLock — regenerate tinymist.lock so tinymist maps every chapter file to
+-- main.typ (where bibliography() lives) and @cite completion works project-wide.
+-- Run it after adding/#including new .typ files. tinymist is Mason-installed and
+-- not on $PATH, so we call it by absolute path and run from the project root.
+vim.api.nvim_create_user_command("TypstLock", function()
+  local tinymist = vim.fs.joinpath(vim.fn.stdpath("data"), "mason", "bin", "tinymist")
+  local buf = vim.api.nvim_buf_get_name(0)
+  local from = buf ~= "" and buf or (vim.uv or vim.loop).cwd()
+  local root = vim.fs.root(from, { "tinymist.lock", "main.typ", ".git" })
+  if not root then
+    vim.notify("TypstLock: no project root (tinymist.lock/main.typ/.git) found", vim.log.levels.ERROR)
+    return
+  end
+  vim.system(
+    { tinymist, "compile", "--save-lock", "main.typ" },
+    { cwd = root },
+    vim.schedule_wrap(function(res)
+      if res.code == 0 then
+        vim.notify("tinymist.lock updated — " .. root)
+        vim.cmd("LspRestart tinymist")
+      else
+        vim.notify("TypstLock failed:\n" .. (res.stderr ~= "" and res.stderr or res.stdout), vim.log.levels.ERROR)
+      end
+    end)
+  )
+end, { desc = "Regenerate tinymist.lock and restart tinymist" })

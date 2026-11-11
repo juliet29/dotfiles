@@ -38,9 +38,17 @@ return {
     --- Typst
     opts.servers.tinymist = {
       -- cmd = { "tinymist" }, -- let Mason install
-      root_dir = function(_, on_dir)
-        return on_dir("/projectsContainer")
+      -- Walk up for a project marker instead of hardcoding a root. The old
+      -- /projectsContainer path only exists in the remote container, so
+      -- tinymist never attached locally (no citation/label completion).
+      root_dir = function(bufnr, on_dir)
+        local fname = vim.api.nvim_buf_get_name(bufnr)
+        on_dir(vim.fs.root(fname, { "tinymist.lock", "typst.toml", ".git" }) or vim.fs.dirname(fname))
       end,
+      -- lockDatabase: resolve each chapter file to main.typ (which holds the
+      -- bibliography) via a tinymist.lock, so @key completion works in every
+      -- file. Generate the lock once: `tinymist compile --save-lock main.typ`.
+      settings = { projectResolution = "lockDatabase" },
     }
 
     --- texlab: native LaTeX language server — provides \command completion,
@@ -82,22 +90,22 @@ return {
     }
 
     --- Harper (Rust-based grammar, fast, English-focused)
-    opts.servers.harper_ls = {
-      filetypes = { "tex", "plaintex", "markdown" },
-      settings = {
-        harper_ls = {
-          linters = {
-            spell_check = true,
-            grammar = true,
-            linking_verb = true,
-            repeated_words = true,
-          },
-          dictionary = {
-            words_dir = vim.fn.expand("~/.config/nvim/spell"),
-          },
-        },
-      },
-    }
+    -- opts.servers.harper_ls = {
+    --   filetypes = { "tex", "plaintex", "markdown", "typst" },
+    --   settings = {
+    --     harper_ls = {
+    --       linters = {
+    --         spell_check = false,
+    --         grammar = true,
+    --         linking_verb = true,
+    --         repeated_words = true,
+    --       },
+    --       dictionary = {
+    --         words_dir = vim.fn.expand("~/.config/nvim/spell"),
+    --       },
+    --     },
+    --   },
+    -- }
     -- Astro and Typescript
     -- opts.servers.astro = {}
     --
