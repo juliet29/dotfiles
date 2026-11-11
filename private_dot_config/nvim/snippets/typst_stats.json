@@ -1,6 +1,0 @@
-{
-  "Conditional probability": {
-    "prefix": "xpr",
-    "body": "Pr($1 | $2)"
-  }
-}

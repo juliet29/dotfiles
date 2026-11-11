@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Read(//Users/julietnwagwuume-ezeoke/.config/nvim/**)",
-      "Bash(rg -rin \"harper_ls|harper-ls|harperls\" .)",
-      "Bash(rg -rn \"ensure_installed|automatic_enable|automatic_installation|mason\" lua/)"
-    ]
-  }
-}

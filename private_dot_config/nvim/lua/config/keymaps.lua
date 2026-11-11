@@ -10,15 +10,15 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true, desc = "Save all modified buffers" }
 )
 
-vim.keymap.set("n", "<Leader>er", "<Cmd>spellrepall<CR>", {
-  desc = "Spell: replace all instances of last z= correction",
-})
+-- vim.keymap.set("n", "<Leader>sra", "<Cmd>spellrepall<CR>", {
+--   desc = "Spell: replace all instances of last z= correction",
+-- })
 
-vim.keymap.set("n", "<Leader>en", "]sz=", { desc = "Spell: next error + suggest" })
-vim.keymap.set("n", "<Leader>e1", "]s1z=", { desc = "Spell: next error + accept first" })
-vim.keymap.set("n", "<Leader>eg", "]szg", { desc = "Spell: next error + add to dict" })
+vim.keymap.set("n", "<Leader>sn", "]sz=", { desc = "Spell: next error + suggest" })
+vim.keymap.set("n", "<Leader>s1", "]s1z=", { desc = "Spell: next error + accept first" })
+vim.keymap.set("n", "<Leader>sg", "]szg", { desc = "Spell: next error + add to dict" })
 
-vim.keymap.set("n", "<Leader>ez", function()
+vim.keymap.set("n", "<Leader>sz", function()
   local word = vim.fn.expand("<cword>")
   local suggestions = vim.fn.spellsuggest(word, 10)
   if #suggestions == 0 then
@@ -110,22 +110,22 @@ vim.diagnostic.config({
 })
 
 -- Final grammar check: start LTeX for a comprehensive pass (disabled by default, Harper handles ongoing)
--- vim.api.nvim_create_user_command("LTexCheck", function()
---   vim.lsp.start({
---     name = "ltex_plus",
---     cmd = { "ltex-ls" },
---     filetypes = { "tex", "plaintex", "bib", "markdown" },
---     settings = {
---       ltex = {
---         language = "en-US",
---         additionalRules = { enablePickyRules = true, motherTongue = "en" },
---         disabledRules = { ["en-US"] = { "PROFANITY" } },
---         dictionary = { ["en-US"] = { ":" .. vim.fn.expand("~/.config/nvim/spell/en.utf-8.add") } },
---       },
---     },
---   })
---   vim.notify("LTeX started for final grammar check", vim.log.levels.INFO)
--- end, { desc = "Start LTeX for final grammar check" })
---
+vim.api.nvim_create_user_command("LTexCheck", function()
+  vim.lsp.start({
+    name = "ltex_plus",
+    cmd = { "ltex-ls" },
+    filetypes = { "tex", "plaintex", "bib", "markdown" },
+    settings = {
+      ltex = {
+        language = "en-US",
+        additionalRules = { enablePickyRules = true, motherTongue = "en" },
+        disabledRules = { ["en-US"] = { "PROFANITY" } },
+        dictionary = { ["en-US"] = { ":" .. vim.fn.expand("~/.config/nvim/spell/en.utf-8.add") } },
+      },
+    },
+  })
+  vim.notify("LTeX started for final grammar check", vim.log.levels.INFO)
+end, { desc = "Start LTeX for final grammar check" })
+
 --- For seeing file paths
--- vim.keymap.set("n", "<leader>cp", ':let @+ = expand("%:.")<CR>', { desc = "Copy relative file path" })
+vim.keymap.set("n", "<leader>cp", ':let @+ = expand("%:.")<CR>', { desc = "Copy relative file path" })
