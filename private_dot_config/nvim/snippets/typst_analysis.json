@@ -1,0 +1,30 @@
+{
+  "Defined as": {
+    "prefix": "xdef",
+    "body": "eq.def "
+  },
+
+  "Limits": {
+    "prefix": "xlim",
+    "body": "limits($1)_($2)"
+  },
+
+  "Vector arrow": {
+    "prefix": "xvec",
+    "body": "arrow($1)"
+  },
+
+  "Plus minus": {
+    "prefix": "xpm",
+    "body": "plus.minus "
+  },
+
+  "Inverse": {
+    "prefix": "xinv",
+    "body": "^(-1)"
+  },
+  "delta_rho": {
+    "prefix": "qdp",
+    "body": "Delta rho"
+  }
+}

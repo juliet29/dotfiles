@@ -1,0 +1,75 @@
+{
+  "In-line math": {
+    "prefix": "xm",
+    "body": "\\$$1\\$$0"
+  },
+
+  "Equation": {
+    "prefix": "xmx",
+    "body": "\\$ $1 \\$$0"
+  },
+
+  "Overline": {
+    "prefix": "xol",
+    "body": "overline($1)"
+  },
+
+  "Fraction": {
+    "prefix": "xfr",
+    "body": "($1)/($2)"
+  },
+
+  "Square root": {
+    "prefix": "xsq",
+    "body": "sqrt($1)"
+  },
+
+  "Absolute value": {
+    "prefix": "xabs",
+    "body": "abs($1)"
+  },
+
+  "Subscript group": {
+    "prefix": "xsub",
+    "body": "_($1)"
+  },
+
+  "Superscript group": {
+    "prefix": "xsup",
+    "body": "^($1)"
+  },
+
+  "Upright text in math": {
+    "prefix": "xtt",
+    "body": "\"$1\""
+  },
+  "Defined as": {
+    "prefix": "xdef",
+    "body": "eq.def "
+  },
+
+  "Limits": {
+    "prefix": "xlim",
+    "body": "limits($1)_($2)"
+  },
+
+  "Vector arrow": {
+    "prefix": "xvec",
+    "body": "arrow($1)"
+  },
+
+  "Plus minus": {
+    "prefix": "xpm",
+    "body": "plus.minus "
+  },
+
+  "Inverse": {
+    "prefix": "xinv",
+    "body": "^(-1)"
+  },
+
+  "Conditional probability": {
+    "prefix": "xpr",
+    "body": "Pr($1 | $2)"
+  }
+}
